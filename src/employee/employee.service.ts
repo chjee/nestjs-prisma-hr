@@ -15,11 +15,7 @@ export class EmployeeService {
       take,
     });
   }
-  // async getEmployeeById(id: number): Promise<employees | null> {
-  //   return await this.prisma.employees.findUnique({
-  //     where: { employee_id: id },
-  //   });
-  // }
+
   async getEmployeeById(
     _employeesWhereUniqueInput: Prisma.employeesWhereUniqueInput,
   ): Promise<employees> {
@@ -27,6 +23,7 @@ export class EmployeeService {
       where: _employeesWhereUniqueInput,
     });
   }
+
   async getHistories(params: {
     id?: number;
     skip?: number;
