@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, departments } from '@prisma/client';
+import { departments } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class DepartmentService {
   constructor(private prisma: PrismaService) {}
+
   async getAllDepartments(params: {
     skip?: number;
     take?: number;
@@ -15,11 +16,16 @@ export class DepartmentService {
       take,
     });
   }
-  async getDepartmentById(
-    _departmentsWhereUniqueInput: Prisma.departmentsWhereUniqueInput,
-  ): Promise<departments> {
+  async getDepartmentById(params: { id: number }): Promise<departments> {
     return await this.prisma.departments.findUnique({
-      where: _departmentsWhereUniqueInput,
+      where: { department_id: params.id },
     });
   }
+  // async getDepartmentById(
+  //   _departmentsWhereUniqueInput: Prisma.departmentsWhereUniqueInput,
+  // ): Promise<departments> {
+  //   return await this.prisma.departments.findUnique({
+  //     where: _departmentsWhereUniqueInput,
+  //   });
+  // }
 }

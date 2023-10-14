@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { DepartmentService } from './department.service';
-import { departments } from '@prisma/client';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/common/zod-validation.pipe';
 
@@ -36,11 +35,20 @@ export class DepartmentController {
     inputs: getAllDepartmentsInput,
     @Res() res: Response,
   ) {
-    const ret = await this.deptService.getAllDepartments({
-      skip: inputs.skip,
-      take: inputs.take,
-    });
+    const ret = await this.deptService.getAllDepartments(inputs);
+    // const ret = await this.deptService.getAllDepartments({
+    //   skip: inputs.skip,
+    //   take: inputs.take,
+    // });
 
+    if (!ret) {
+      res.status(HttpStatus.NOT_FOUND).json({
+        resultCode: 0,
+        msg: 'not found',
+        payload: null,
+      });
+      return;
+    }
     res.status(HttpStatus.OK).json({ resultCode: 1, msg: 'ok', payload: ret });
   }
   @Get(':id')
@@ -48,9 +56,18 @@ export class DepartmentController {
     @Param('id', ParseIntPipe) id: number,
     @Res() res: Response,
   ) {
-    const ret: departments = await this.deptService.getDepartmentById({
-      department_id: id,
-    });
+    const ret = await this.deptService.getDepartmentById({ id });
+    // const ret: departments = await this.deptService.getDepartmentById({
+    //   department_id: id,
+    // });
+    if (!ret) {
+      res.status(HttpStatus.NOT_FOUND).json({
+        resultCode: 0,
+        msg: 'not found',
+        payload: null,
+      });
+      return;
+    }
 
     res.status(HttpStatus.OK).json({ resultCode: 1, msg: 'ok', payload: ret });
   }
