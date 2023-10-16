@@ -14,6 +14,7 @@ import { Response } from 'express';
 import { DepartmentService } from './department.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/common/zod-validation.pipe';
+import { ApiBody, ApiOperation, ApiParam, ApiTags } from '@nestjs/swagger';
 
 export const getAllDepartmentsZodSchema = z
   .object({
@@ -25,10 +26,32 @@ export const getAllDepartmentsZodSchema = z
 export type getAllDepartmentsInput = z.infer<typeof getAllDepartmentsZodSchema>;
 
 @Controller('department')
+@ApiTags('department API')
 export class DepartmentController {
   constructor(private readonly deptService: DepartmentService) {}
 
   @Post()
+  @ApiOperation({
+    summary: 'Get departments by pagination',
+    description: 'Get all departments by pagination',
+  })
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        skip: {
+          type: 'number',
+          nullable: true,
+          default: 0,
+        },
+        take: {
+          type: 'number',
+          nullable: true,
+          default: 10,
+        },
+      },
+    },
+  })
   @Bind(Body())
   @UsePipes(new ZodValidationPipe(getAllDepartmentsZodSchema))
   async getAllDepartments(
@@ -52,6 +75,18 @@ export class DepartmentController {
     res.status(HttpStatus.OK).json({ resultCode: 1, msg: 'ok', payload: ret });
   }
   @Get(':id')
+  @ApiOperation({
+    summary: 'Get department by id',
+    description: 'Get department by id',
+  })
+  @ApiParam({
+    name: 'id',
+    required: true,
+    description: 'department_id',
+    schema: {
+      type: 'number',
+    },
+  })
   async getDepartmentById(
     @Param('id', ParseIntPipe) id: number,
     @Res() res: Response,

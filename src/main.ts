@@ -15,11 +15,12 @@ async function bootstrap() {
     .addTag('HR')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api-docs', app, document);
 
   app.enableShutdownHooks();
 
   await app.listen(3000);
+  console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
 bootstrap();
