@@ -9,6 +9,7 @@ import {
   Bind,
   UsePipes,
   ParseIntPipe,
+  Patch,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { DepartmentService } from './department.service';
@@ -30,7 +31,7 @@ export type getAllDepartmentsInput = z.infer<typeof getAllDepartmentsZodSchema>;
 export class DepartmentController {
   constructor(private readonly deptService: DepartmentService) {}
 
-  @Post()
+  @Patch()
   @ApiOperation({
     summary: 'Get departments by pagination',
     description: 'Get all departments by pagination',
