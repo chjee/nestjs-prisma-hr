@@ -56,6 +56,12 @@ $ npm run migrate:up
 $ npm run migrate:down
 ```
 
+## .env configuration
+
+```sh
+DATABASE_URL="mysql://username:password@localhost:3306/hr?schema=public"
+```
+
 ## Author
 
 👤 **Changhoon Jee <chjee71@gmail.com>**
