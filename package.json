@@ -1,8 +1,8 @@
 {
   "name": "nestjs-prisma-hr",
   "version": "0.0.1",
-  "description": "NestJS, Prisma, MySQL, Typescript를 이용한 HR API",
-  "author": "Changhoon Jee",
+  "description": "NestJS, Prisma, MySQL, Typescript를 이용한 REST API",
+  "author": "Changhoon Jee <chjee71@gmail.com>",
   "private": true,
   "license": "UNLICENSED",
   "keywords": [
@@ -20,6 +20,10 @@
     "swagger",
     "zod"
   ],
+  "engines": {
+    "node": ">=18.17.1",
+    "npm": ">=9.6.7"
+  },
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
