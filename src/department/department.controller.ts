@@ -1,17 +1,15 @@
 import {
   Controller,
   Get,
-  Post,
   Param,
   Body,
   HttpStatus,
-  Res,
   Bind,
   UsePipes,
   ParseIntPipe,
   Patch,
+  HttpException,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { DepartmentService } from './department.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/common/zod-validation.pipe';
@@ -55,25 +53,16 @@ export class DepartmentController {
   })
   @Bind(Body())
   @UsePipes(new ZodValidationPipe(getAllDepartmentsZodSchema))
-  async getAllDepartments(
-    inputs: getAllDepartmentsInput,
-    @Res() res: Response,
-  ) {
+  async getAllDepartments(inputs: getAllDepartmentsInput) {
     const ret = await this.deptService.getAllDepartments(inputs);
     // const ret = await this.deptService.getAllDepartments({
     //   skip: inputs.skip,
     //   take: inputs.take,
     // });
-
     if (!ret) {
-      res.status(HttpStatus.NOT_FOUND).json({
-        resultCode: 0,
-        msg: 'not found',
-        payload: null,
-      });
-      return;
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
-    res.status(HttpStatus.OK).json({ resultCode: 1, msg: 'ok', payload: ret });
+    return { resultCode: 1, msg: 'ok', payload: ret };
   }
   @Get(':id')
   @ApiOperation({
@@ -88,23 +77,14 @@ export class DepartmentController {
       type: 'number',
     },
   })
-  async getDepartmentById(
-    @Param('id', ParseIntPipe) id: number,
-    @Res() res: Response,
-  ) {
+  async getDepartmentById(@Param('id', ParseIntPipe) id: number) {
     const ret = await this.deptService.getDepartmentById({ id });
     // const ret: departments = await this.deptService.getDepartmentById({
     //   department_id: id,
     // });
     if (!ret) {
-      res.status(HttpStatus.NOT_FOUND).json({
-        resultCode: 0,
-        msg: 'not found',
-        payload: null,
-      });
-      return;
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
-
-    res.status(HttpStatus.OK).json({ resultCode: 1, msg: 'ok', payload: ret });
+    return { resultCode: 1, msg: 'ok', payload: ret };
   }
 }
