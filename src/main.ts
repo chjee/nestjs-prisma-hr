@@ -1,12 +1,20 @@
 import { NestFactory } from '@nestjs/core';
+import {
+  NestFastifyApplication,
+  FastifyAdapter,
+} from '@nestjs/platform-fastify';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: ['error', 'warn', 'log', 'debug', 'verbose'],
-    cors: { origin: '*', methods: 'GET,HEAD,PUT,PATCH,POST,DELETE' },
-  });
+  const app = await NestFactory.create<NestFastifyApplication>(
+    AppModule,
+    new FastifyAdapter(),
+    {
+      logger: ['error', 'warn', 'log', 'debug', 'verbose'],
+      cors: { origin: '*', methods: 'GET,HEAD,PUT,PATCH,POST,DELETE' },
+    },
+  );
 
   const config = new DocumentBuilder()
     .setTitle('Oracle HR Example')
@@ -19,7 +27,7 @@ async function bootstrap() {
 
   app.enableShutdownHooks();
 
-  await app.listen(3000);
+  await app.listen(3000, '0.0.0.0');
   console.log(`Application is running on: ${await app.getUrl()}`);
 }
 
