@@ -34,6 +34,22 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
+## Other commands
+
+```sh
+# generate prisma client
+$ npx prisma generate
+
+# generate prisma migration
+$ npx prisma migrate dev --name init
+
+# reset prisma migration
+$ npx prisma migrate reset
+
+# execute database seed
+$ npx prisma db seed --preview-feature
+```
+
 ## .env configuration
 
 ```sh
